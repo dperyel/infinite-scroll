@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, CSSProperties, RefObject } from "react";
 import { ImageInfoList } from "../../utils/image/ImageInfoList";
 import { Image } from "./Image";
-import { ImageInfo } from "../../utils/image/types";
 import { VisibleImageList } from "../../utils/image/VisibleImageList";
 import { ImageNode } from "../../utils/image/ImageNode";
 
@@ -9,17 +8,39 @@ interface ImageBlockProps {
     infoList: ImageInfoList;
 }
 
-const shiftDirection = (imageNode: ImageNode) => imageNode.getNext();
+const shiftRight = (imageNode: ImageNode) => imageNode.getNext();
+const shiftLeft = (imageNode: ImageNode) => imageNode.getPrevious();
+
+const defaultImageTapeStyle: CSSProperties = {
+    paddingTop: 0,
+    paddingBottom: 0,
+};
+
+const visibleElements = 20;
+const imageHeight = 200;
+const thresholdToSwapImages = 10 * imageHeight;
 
 export const ImageBlock: React.FC<ImageBlockProps> = (props) => {
-    const [visibleList, setVisibleList] = useState(new VisibleImageList())
     const infoList = props.infoList;
+    const containerRef: RefObject<HTMLDivElement> = React.createRef();
+
+    const [visibleList, setVisibleList] = useState(new VisibleImageList());
+    const [imageTapeStyle, setImageTapeStyle] = useState(defaultImageTapeStyle);
 
     useEffect(() => {
         let tail: ImageNode = infoList.getHead() as ImageNode;
-        for (let i = 0; i < 10; i++) {
+
+        for (let i = 0; i < visibleElements; i++) {
             tail = tail.getNext() as ImageNode;
         }
+
+        const totalSize = infoList.getSize();
+        const extraPadding = (totalSize - visibleElements) * imageHeight;
+
+        setImageTapeStyle({
+            ...defaultImageTapeStyle,
+            paddingBottom: extraPadding,
+        });
 
         const list = new VisibleImageList()
             .setHead(infoList.getHead() as ImageNode)
@@ -29,19 +50,57 @@ export const ImageBlock: React.FC<ImageBlockProps> = (props) => {
     }, [infoList]);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            const shiftedList = visibleList.shiftList(shiftDirection);
+        const onScroll = () => {
+            if (containerRef.current) {
+                const containerPosition = containerRef.current.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
 
-            setVisibleList(shiftedList);
-        }, 10);
+                if (containerPosition.bottom - viewportHeight <= thresholdToSwapImages) {
+                    const shiftedList = visibleList.shiftList(shiftRight);
+                    if (shiftedList !== visibleList) {
+                        setVisibleList(shiftedList);
+                    
+                        const paddingBottom = imageTapeStyle.paddingBottom as number - imageHeight;
+                        const paddingTop = imageTapeStyle.paddingTop as number + imageHeight;
+    
+                        setImageTapeStyle({
+                            ...imageTapeStyle,
+                            paddingBottom: paddingBottom,
+                            paddingTop: paddingTop,
+                        });
+                    }
+
+                } else if (containerPosition.top + thresholdToSwapImages - visibleElements >= 0) {
+                    const shiftedList = visibleList.shiftList(shiftLeft);
+                    if (shiftedList !== visibleList) {
+                        setVisibleList(shiftedList);
+
+                        const paddingBottom = imageTapeStyle.paddingBottom as number + imageHeight;
+                        const paddingTop = imageTapeStyle.paddingTop as number - imageHeight;
+
+                        setImageTapeStyle({
+                            ...imageTapeStyle,
+                            paddingBottom: paddingBottom,
+                            paddingTop: paddingTop,
+                        });
+                    }
+                }
+            }
+        };
+
+        window.addEventListener("scroll", onScroll, false);
 
         return () => {
-            clearInterval(interval);
-        }
-    });
+            window.removeEventListener("scroll", onScroll, false);
+        };
+    }, [visibleList, imageTapeStyle, containerRef]);
 
-    return (<Fragment>
+    return <Fragment>
         <p>Counter is {infoList.getSize()}</p>
-        {visibleList.mapToArray<ImageInfo>(v => v).map(image => <Image key={image.id} info={image} />)}
-    </Fragment>);
+        <div style={imageTapeStyle}>
+            <div ref={containerRef}>
+                {visibleList.mapToArray(image => <Image key={image.id} info={image} />)}
+            </div>
+        </div>
+    </Fragment>;
 }

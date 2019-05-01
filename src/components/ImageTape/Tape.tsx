@@ -8,6 +8,7 @@ export const Tape: React.FC = () => {
     const [imageList, setImageList] = useState(new ImageInfoList());
 
     useEffect(() => {
+        // TODO get this data from context API to avoid child component re-renders
         const list = new ImageInfoList();
         for(let i = 0; i < 1000; i++) {
             const imageNode = new ImageNode({
