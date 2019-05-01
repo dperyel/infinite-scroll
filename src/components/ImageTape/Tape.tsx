@@ -8,7 +8,6 @@ export const Tape: React.FC = () => {
     const [imageList, setImageList] = useState(new ImageInfoList());
 
     useEffect(() => {
-        console.log("Called");
         const list = new ImageInfoList();
         for(let i = 0; i < 1000; i++) {
             const imageNode = new ImageNode({
@@ -19,8 +18,6 @@ export const Tape: React.FC = () => {
 
         setImageList(list);
     }, []);
-
-
 
     return (<div>
         {imageList.getSize() === 0 ? <p>Loading...</p> : <ImageBlock infoList={imageList} />}

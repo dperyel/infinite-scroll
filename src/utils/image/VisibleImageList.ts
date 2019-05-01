@@ -13,21 +13,6 @@ import { Nullable } from "../data-structures/types";
  */
 export class VisibleImageList extends DoublyLinkedList<ImageInfo, ImageNode> {
 
-    public constructor(head: ImageNode, tail: ImageNode) {
-        super();
-
-        if (!head) {
-            throw new Error(ErrorMessage.NoHead);
-        }
-
-        if (head === tail) {
-            throw new Error(ErrorMessage.SameTail);
-        }
-
-        this.head = head;
-        this.tail = tail;
-    }
-
     public setHead(head: ImageNode) {
         this.head = head;
 
@@ -42,7 +27,8 @@ export class VisibleImageList extends DoublyLinkedList<ImageInfo, ImageNode> {
 
     /**
      * Shifts the Visible list to a provided direction
-     * The list is shifted if no boundaries hired
+     * The list is shifted if no boundaries hited
+     * The method return a new instance if the list is shifted and the same reference if nothing changed
      *
      * @param directionFn
      */
@@ -51,8 +37,19 @@ export class VisibleImageList extends DoublyLinkedList<ImageInfo, ImageNode> {
         const newTail = this.tail && directionFn(this.tail);
 
         if (newHead && newTail) {
-            this.head = newHead;
-            this.tail = newTail;
+            return new VisibleImageList().setHead(newHead).setTail(newTail);
+        }
+
+        return this;
+    }
+
+    private validateList() {
+        if (!this.head) {
+            throw new Error(ErrorMessage.NoHead);
+        }
+
+        if (this.head === this.tail) {
+            throw new Error(ErrorMessage.SameTail);
         }
     }
 
