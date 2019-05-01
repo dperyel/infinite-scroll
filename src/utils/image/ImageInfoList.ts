@@ -1,4 +1,4 @@
-import { DoublyLinkedList } from "../../utils/data-structures/DoublyLinkedList";
+import { DoublyLinkedList } from "../data-structures/DoublyLinkedList";
 import { ImageInfo } from "./types";
 import { ImageNode } from "./ImageNode";
 

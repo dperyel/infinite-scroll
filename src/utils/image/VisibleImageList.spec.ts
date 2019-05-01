@@ -1,7 +1,6 @@
 import { ImageNode } from "./ImageNode";
 import { ImageInfoList } from "./ImageInfoList";
-import { VisibleImageList } from "./VIsibleImageList";
-import { ImageInfo } from "./types";
+import { VisibleImageList } from "./VisibleImageList";
 
 describe("VisibleImageList", () => {
 

@@ -1,7 +1,7 @@
-import { DoublyLinkedList } from "../../utils/data-structures/DoublyLinkedList";
+import { DoublyLinkedList } from "../data-structures/DoublyLinkedList";
 import { ImageNode } from "./ImageNode";
 import { ImageInfo, ErrorMessage } from "./types";
-import { Nullable } from "../../utils/data-structures/types";
+import { Nullable } from "../data-structures/types";
 
 /**
  * VisibleImageList is created for getting a slice of images which should be rendered
