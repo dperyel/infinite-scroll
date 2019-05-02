@@ -6,6 +6,7 @@ import { ImageNode } from "../../utils/image/ImageNode";
 
 interface ImageBlockProps {
     infoList: ImageInfoList;
+    totalImageHeight: number;
 }
 
 const shiftRight = (imageNode: ImageNode) => imageNode.getNext();
@@ -39,7 +40,7 @@ export const ImageBlock: React.FC<ImageBlockProps> = (props) => {
 
         setImageTapeStyle({
             ...defaultImageTapeStyle,
-            paddingBottom: extraPadding,
+            paddingBottom: props.totalImageHeight,
         });
 
         const list = new VisibleImageList()
@@ -55,35 +56,40 @@ export const ImageBlock: React.FC<ImageBlockProps> = (props) => {
                 const containerPosition = containerRef.current.getBoundingClientRect();
                 const viewportHeight = window.innerHeight;
 
-                if (containerPosition.bottom - viewportHeight <= thresholdToSwapImages) {
+                // TODO isolate it to a separate function with direction
+                if (containerPosition.bottom - viewportHeight < thresholdToSwapImages) {
                     const shiftedList = visibleList.shiftList(shiftRight);
-                    if (shiftedList !== visibleList) {
-                        setVisibleList(shiftedList);
-                    
-                        const paddingBottom = imageTapeStyle.paddingBottom as number - imageHeight;
-                        const paddingTop = imageTapeStyle.paddingTop as number + imageHeight;
-    
-                        setImageTapeStyle({
-                            ...imageTapeStyle,
-                            paddingBottom: paddingBottom,
-                            paddingTop: paddingTop,
-                        });
+                    if (shiftedList === visibleList) {
+                        return;
                     }
+                    setVisibleList(shiftedList);
+                
+                    const paddingBottom = imageTapeStyle.paddingBottom as number - imageHeight;
+                    const paddingTop = imageTapeStyle.paddingTop as number + imageHeight;
 
-                } else if (containerPosition.top + thresholdToSwapImages - visibleElements >= 0) {
+                    setImageTapeStyle({
+                        ...imageTapeStyle,
+                        paddingBottom: paddingBottom,
+                        paddingTop: paddingTop,
+                    });
+
+                } else if (containerPosition.top + thresholdToSwapImages >= 0) {
                     const shiftedList = visibleList.shiftList(shiftLeft);
-                    if (shiftedList !== visibleList) {
-                        setVisibleList(shiftedList);
 
-                        const paddingBottom = imageTapeStyle.paddingBottom as number + imageHeight;
-                        const paddingTop = imageTapeStyle.paddingTop as number - imageHeight;
-
-                        setImageTapeStyle({
-                            ...imageTapeStyle,
-                            paddingBottom: paddingBottom,
-                            paddingTop: paddingTop,
-                        });
+                    if (shiftedList === visibleList) {
+                        return;
                     }
+
+                    setVisibleList(shiftedList);
+
+                    const paddingBottom = imageTapeStyle.paddingBottom as number + imageHeight;
+                    const paddingTop = imageTapeStyle.paddingTop as number - imageHeight;
+
+                    setImageTapeStyle({
+                        ...imageTapeStyle,
+                        paddingBottom: paddingBottom,
+                        paddingTop: paddingTop,
+                    });
                 }
             }
         };
@@ -102,5 +108,6 @@ export const ImageBlock: React.FC<ImageBlockProps> = (props) => {
                 {visibleList.mapToArray(image => <Image key={image.id} info={image} />)}
             </div>
         </div>
+        <p>Loading...</p>
     </Fragment>;
 }
