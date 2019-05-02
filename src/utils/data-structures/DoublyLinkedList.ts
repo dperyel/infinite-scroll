@@ -15,8 +15,20 @@ export class DoublyLinkedList<T, G extends Node<T>> {
         this.tail = null;
     }
 
+    public setHead(head: G) {
+        this.head = head;
+
+        return this;
+    }
+
     public getHead() {
         return this.head;
+    }
+
+    public setTail(tail: G) {
+        this.tail = tail;
+
+        return this;
     }
 
     public getTail() {

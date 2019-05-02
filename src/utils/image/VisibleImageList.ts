@@ -13,18 +13,6 @@ import { Nullable } from "../data-structures/types";
  */
 export class VisibleImageList extends DoublyLinkedList<ImageInfo, ImageNode> {
 
-    public setHead(head: ImageNode) {
-        this.head = head;
-
-        return this;
-    }
-
-    public setTail(tail: ImageNode) {
-        this.tail = tail;
-
-        return this;
-    }
-
     /**
      * Shifts the Visible list to a provided direction
      * The list is shifted if no boundaries hited

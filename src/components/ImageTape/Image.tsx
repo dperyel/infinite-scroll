@@ -1,28 +1,19 @@
-import React, { CSSProperties, useState } from "react";
+import React, { CSSProperties } from "react";
 import { ImageInfo } from "../../utils/image/types";
+import "./Image.css";
 
 interface ImageProps {
     info: ImageInfo;
 }
 
-const defaultFrameStyle: CSSProperties = {
-    width: 240,
-    height: 200,
-    backgroundColor: "#333333",
-};
-
 export const Image: React.FC<ImageProps> = ({ info }) => {
 
-    const frameStyle = {
-        ...defaultFrameStyle,
-        height: info.images.fixed_width_downsampled.height,
+    const imageInfo = info.images.fixed_width_downsampled;
+    const frameStyle: CSSProperties = {
+        height: `${imageInfo.height}px`,
+        width: `${imageInfo.width}px`,
+        backgroundImage: `url(${imageInfo.url})`,
     }
 
-    return <div style={frameStyle}>
-        <img
-            width={info.images.fixed_width_downsampled.width}
-            height={info.images.fixed_width_downsampled.height}
-            alt={info.title}
-            src={info.images.fixed_width_downsampled.url} />
-    </div>
+    return <div className="Image" style={frameStyle} />
 }

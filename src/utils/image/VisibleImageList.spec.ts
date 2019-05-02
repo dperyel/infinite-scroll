@@ -1,6 +1,24 @@
 import { ImageNode } from "./ImageNode";
 import { ImageInfoList } from "./ImageInfoList";
 import { VisibleImageList } from "./VisibleImageList";
+import { ImageInfo } from "./types";
+
+const mockedImageInfo = (name: string): ImageInfo => ({
+    id: name,
+    title: name,
+    images: {
+        fixed_width_still: {
+            height: "5",
+            url: "test.com",
+            width: "10",
+        },
+        fixed_width_downsampled: {
+            height: "5",
+            url: "test.com",
+            width: "10",
+        },
+    }
+});
 
 describe("VisibleImageList", () => {
 
@@ -14,13 +32,13 @@ describe("VisibleImageList", () => {
     let infoList: ImageInfoList;
     
     beforeEach(() => {
-        node1 = new ImageNode({ id: "node1" });
-        node2 = new ImageNode({ id: "node2" });
-        node3 = new ImageNode({ id: "node3" });
-        node4 = new ImageNode({ id: "node4" });
-        node5 = new ImageNode({ id: "node5" });
-        node6 = new ImageNode({ id: "node6" });
-        node7 = new ImageNode({ id: "node7" });
+        node1 = new ImageNode(mockedImageInfo("node1"));
+        node2 = new ImageNode(mockedImageInfo("node2"));
+        node3 = new ImageNode(mockedImageInfo("node3"));
+        node4 = new ImageNode(mockedImageInfo("node4"));
+        node5 = new ImageNode(mockedImageInfo("node5"));
+        node6 = new ImageNode(mockedImageInfo("node6"));
+        node7 = new ImageNode(mockedImageInfo("node7"));
 
         infoList = (new ImageInfoList()).add(node1)
             .add(node2)

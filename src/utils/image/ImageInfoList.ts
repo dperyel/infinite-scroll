@@ -8,6 +8,12 @@ import { ImageNode } from "./ImageNode";
 export class ImageInfoList extends DoublyLinkedList<ImageInfo, ImageNode> {
     private size = 0;
 
+    public setSize(size: number) {
+        this.size = size;
+
+        return this;
+    }
+
     public getSize() {
         return this.size;
     }
