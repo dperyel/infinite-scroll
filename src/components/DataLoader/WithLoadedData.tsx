@@ -9,11 +9,12 @@ interface WithLoadedDataProps {
 }
 
 /**
- * Current HOC gets data from server and set them into a child component
- *
- * TODO It should get a API type as a second parameter to know which API to trigger
+ * withLoadedData expects to get a child component, which implements TapeProps interface
+ * as a second parameter RequestStrategy should be provided so the child component get
+ * data from an apropriate API
  *
  * @param Component 
+ * @param apiStrategy: RequestStrategy
  */
 export function withLoadedData(Component: React.FC<TapeProps>, apiStrategy: RequestStrategy): React.FC<WithLoadedDataProps> {
     return function WithLoadedData({ query }) {
@@ -61,7 +62,7 @@ export function withLoadedData(Component: React.FC<TapeProps>, apiStrategy: Requ
                             imageList.add(imageNode);
 
                             // TODO notify useScroll with this value to adjust scroll
-                            // adjustedHeight += Number(imageInfo.images.fixed_width_downsampled.height);
+                            // adjustedHeight += Number(imageInfo.images.preview.height);
                         }
                     });
 
