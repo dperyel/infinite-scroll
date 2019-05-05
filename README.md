@@ -49,5 +49,3 @@ Launches the test runner in the interactive watch mode.<br>
  * Cover the presentational components and hooks by unit tests.
 
  * Thresholds could be calculated based on the viewport size
-
- * `withLoadedData` HOC should be a fatory which triggers the data adaptors to a known interface. We should be able use any image API other words.

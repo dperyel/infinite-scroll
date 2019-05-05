@@ -1,5 +1,18 @@
 import { ImageNode } from "./ImageNode";
 import { ImageInfoList } from "./ImageInfoList";
+import { ImageInfo } from "./types";
+
+const mockedImageInfo = (name: string): ImageInfo => ({
+    id: name,
+    title: name,
+    images: {
+        preview: {
+            height: "5",
+            url: "test.com",
+            width: "10",
+        },
+    }
+});
 
 describe("ImageInfoList", () => {
 
@@ -8,9 +21,9 @@ describe("ImageInfoList", () => {
     let node3: ImageNode;
 
     beforeEach(() => {
-        node1 = new ImageNode({ id: "node1" });
-        node2 = new ImageNode({ id: "node2" });
-        node3 = new ImageNode({ id: "node3" });
+        node1 = new ImageNode(mockedImageInfo("node1"));
+        node2 = new ImageNode(mockedImageInfo("node2"));
+        node3 = new ImageNode(mockedImageInfo("node3"));
     });
 
     it("should contain only a head node", () => {

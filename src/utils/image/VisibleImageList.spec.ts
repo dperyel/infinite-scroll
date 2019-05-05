@@ -7,12 +7,7 @@ const mockedImageInfo = (name: string): ImageInfo => ({
     id: name,
     title: name,
     images: {
-        fixed_width_still: {
-            height: "5",
-            url: "test.com",
-            width: "10",
-        },
-        fixed_width_downsampled: {
+        preview: {
             height: "5",
             url: "test.com",
             width: "10",

@@ -18,7 +18,7 @@ const defaultPaddingOnNewData = 10000;
 
 function getHeightFromNode(node: Nullable<ImageNode>): number {
     if (node) {
-        return Number(node.getValue().images.fixed_width_downsampled.height);
+        return Number(node.getValue().images.preview.height);
     }
 
     return 0;
@@ -50,7 +50,7 @@ export const useScroll: UseScroll = (infoList, containerRef, appRoachingBottomNo
         }
 
         const listHeight = infoList
-            .mapToArray<number>(image => Number(image.images.fixed_width_downsampled.height))
+            .mapToArray<number>(image => Number(image.images.preview.height))
             .reduce((acc, height) => acc += height, 0);
 
         setImageTapeStyle({
