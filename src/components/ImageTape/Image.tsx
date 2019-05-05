@@ -8,7 +8,7 @@ interface ImageProps {
 
 export const Image: React.FC<ImageProps> = ({ info }) => {
 
-    const imageInfo = info.images.fixed_width_downsampled;
+    const imageInfo = info.images.preview;
     const frameStyle: CSSProperties = {
         height: `${imageInfo.height}px`,
         width: `${imageInfo.width}px`,

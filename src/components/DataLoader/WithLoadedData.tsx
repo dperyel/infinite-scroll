@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ImageInfoList } from "../../utils/image/ImageInfoList";
-import { getGiphies } from "./giphyRequest";
 import { ImageNode } from "../../utils/image/ImageNode";
 import { TapeProps } from "../ImageTape/Tape";
+import { RequestStrategy } from "../../utils/request/types";
 
 interface WithLoadedDataProps {
     query: string;
@@ -15,7 +15,7 @@ interface WithLoadedDataProps {
  *
  * @param Component 
  */
-export function withLoadedData(Component: React.FC<TapeProps>): React.FC<WithLoadedDataProps> {
+export function withLoadedData(Component: React.FC<TapeProps>, apiStrategy: RequestStrategy): React.FC<WithLoadedDataProps> {
     return function WithLoadedData({ query }) {
 
         const [imageList, setImageList] = useState(new ImageInfoList());
@@ -25,7 +25,7 @@ export function withLoadedData(Component: React.FC<TapeProps>): React.FC<WithLoa
         useEffect(() => {
             const abortRequestController = new AbortController();
 
-            getGiphies(query, abortRequestController.signal)
+            apiStrategy.search(query, abortRequestController.signal)
                 .then(({ data, pagination }) => {
                     setPaginationData(pagination);
                     const list = new ImageInfoList();
@@ -48,7 +48,7 @@ export function withLoadedData(Component: React.FC<TapeProps>): React.FC<WithLoa
             if (approachingBottom) {
                 const abortRequestController = new AbortController();
                 const offset = paginationData.offset + paginationData.count;
-                getGiphies(query, abortRequestController.signal, offset)
+                apiStrategy.search(query, abortRequestController.signal, offset)
                     .then(({ data, pagination }) => {
                         setApproachingBottom(false);
                         setPaginationData(pagination);
